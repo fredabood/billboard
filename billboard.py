@@ -86,6 +86,7 @@ if __name__ == "__main__":
                 while date <= datetime.now():
                     save_html(chart=chart, bucket=bucket, date=date)
                     charts[category][chart] = int(date.strftime('%Y%m%d'))
+                    print(chart + ': ' + date.strftime('%Y-%m-%d') + '\n')
                     date += timedelta(1)
                     
                     with open('charts.json', 'w') as log:
