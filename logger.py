@@ -1,11 +1,35 @@
 import json
 import glob
+import boto3
+
+'''
+Shifting to centralized S3 log storage
+'''
+
+client = boto3.client('s3')  # low-level functional API
+resource = boto3.resource('s3')  # high-level object-oriented API
+bucket = resource.Bucket('billboard-logs')  # subsitute for your s3 bucket name
+files = list(bucket.objects.filter())
+
+charts = {}
+
+keys = []
+for file in files:
+    keys.append(file.key.replace('.json', ''))
+
+for key in keys:
+    partial_chart = list(bucket.objects.filter(Prefix=key))[0]
+    charts[key] = 
+
+json.loads(file.get()['Body'].read().decode('utf-8'))
+
+'''
+Local log storage
+'''
 
 paths = glob.glob('./charts/*.json')
 
-log_paths =
-
-def assemble_chart(log_paths=paths, agg_log_file='charts.json'):
+def assemble_chart(broken_log_dir=paths, agg_log_file='charts.json'):
 
     charts = {
       "Greatest of All Time": json.loads(broken_log_dir + '/greatest.json')[0],
