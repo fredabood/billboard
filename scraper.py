@@ -17,34 +17,64 @@ if __name__ == "__main__":
     bucket = 'billboard-charts-html'
     bucket = resource.Bucket(bucket)
 
-    with open('charts.json') as log:
+    logfile = 'topcharts.json'
+
+    with open(logfile) as log:
         charts = json.load(log)
 
-    # Save webpages to HTML files on S3 bucket
-    for category in charts:
-        for chart in charts[category]:
+    for chart in charts:
 
-            date = charts[category][chart]
+        date = charts[chart]
 
-            if date > 0:
+        if date > 0:
 
-                date = find_next_date(date)
+            date = find_next_date(date)
 
-                while date <= datetime.now():
+            while date <= datetime.now():
 
-                    save_html(chart=chart, bucket=bucket, date=date)
+                save_html(chart=chart, bucket=bucket, date=date)
 
-                    charts[category][chart] = int(date.strftime('%Y%m%d'))
-                    print(chart + ': ' + date.strftime('%Y-%m-%d') + '\n')
+                charts[chart] = int(date.strftime('%Y%m%d'))
+                print(chart + ': ' + date.strftime('%Y-%m-%d') + '\n')
 
-                    date += timedelta(1)
+                date += timedelta(1)
 
-                    with open('charts.json', 'w') as log:
-                        json.dump(charts, log)
-
-            else:
-
-                save_html(chart=chart, bucket=bucket)
-
-                with open('charts.json', 'w') as log:
+                with open(logfile, 'w') as log:
                     json.dump(charts, log)
+
+        else:
+            save_html(chart=chart, bucket=bucket)
+
+            with open(logfile, 'w') as log:
+                json.dump(charts, log)
+
+    # # Save webpages to HTML files on S3 bucket
+    # for category in charts:
+    #     for chart in charts[category]:
+    #
+    #         date = charts[category][chart]
+    #
+    #         if date > 0:
+    #
+    #             date = find_next_date(date)
+    #
+    #             while date <= datetime.now():
+    #
+    #                 save_html(chart=chart, bucket=bucket, date=date)
+    #
+    #                 charts[category][chart] = int(date.strftime('%Y%m%d'))
+    #                 print(chart + ': ' + date.strftime('%Y-%m-%d') + '\n')
+    #
+    #                 date += timedelta(1)
+    #
+    #                 with open('charts.json', 'w') as log:
+    #                     json.dump(charts, log)
+    #
+    #         else:
+    #
+    #             save_html(chart=chart, bucket=bucket)
+    #
+    #             with open('charts.json', 'w') as log:
+    #                 json.dump(charts, log)
+
+    # Save webpages to HTML files on S3 bucket

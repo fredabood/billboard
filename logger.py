@@ -19,7 +19,7 @@ for file in files:
 
 for key in keys:
     partial_chart = list(bucket.objects.filter(Prefix=key))[0]
-    charts[key] = 
+    charts[key] =
 
 json.loads(file.get()['Body'].read().decode('utf-8'))
 
@@ -28,6 +28,7 @@ Local log storage
 '''
 
 paths = glob.glob('./charts/*.json')
+
 
 def assemble_chart(broken_log_dir=paths, agg_log_file='charts.json'):
 
